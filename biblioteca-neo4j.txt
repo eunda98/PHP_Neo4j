@@ -1,0 +1,102 @@
+//Nodos cancion
+CREATE(a:cancion{codigo:1,nombre:"un ratico",idioma:"Español",genero:"balada",duracion:"00:03:51"}),
+      (b:cancion{codigo:2,nombre:" Lo mejor que hay en mi vida",idioma:"Español",genero:"balada",duracion:" 00:04:00"}),
+      (c:cancion{codigo:3,nombre:" Voy a extrañarte",idioma:"Español",genero:"balada",duracion:" 00:03:20"}),
+      (d:cancion{codigo:4,nombre:" A Dios le pido",idioma:"Español",genero:" pop",duracion:" 00:05:06"}),
+      (e:cancion{codigo:5,nombre:" Recuerdame",idioma:"Español",genero:" Vallenato",duracion:" 00:03:15"}),
+      (f:cancion{codigo:6,nombre:" Bonita ",idioma:"Español",genero:" Vallenato ",duracion:" 00:03:15 "}),
+      (g:cancion{codigo:7,nombre:" A Dios le pido",idioma:"Español",genero:" Vallenato ",duracion:" 00:04:51"})
+//restricciones 
+CREATE CONSTRAINT ON (w:cancion) ASSERT w.codigo IS UNIQUE
+
+//campos obligatorios - ejecutar individualmente
+CREATE CONSTRAINT ON (w:cancion) ASSERT exists(w.codigo)
+CREATE CONSTRAINT ON (w:cancion) ASSERT exists(w.nombre)
+CREATE CONSTRAINT ON (w:cancion) ASSERT exists(w.genero)
+CREATE CONSTRAINT ON (w:cancion) ASSERT exists(w.idioma)
+CREATE CONSTRAINT ON (w:cancion) ASSERT exists(w.duracion)
+
+
+//Nodos interprete
+CREATE(aa:interprete{codigo:11,nombre:" Andres cepeda",pais:" Colombia "}),
+      (bb:interprete{codigo:22,nombre:" Juan Vásquez",pais:"Colombia", Alias:"Juanes"}),
+      (cc:interprete{codigo:33,nombre:" Pablo Alborán",pais:" España"})
+//restricciones 
+CREATE CONSTRAINT ON (x:interprete) ASSERT x.codigo IS UNIQUE
+
+//campos obligatorios - ejecutar individualmente
+CREATE CONSTRAINT ON (x:interprete) ASSERT exists(x.codigo)
+CREATE CONSTRAINT ON (x:interprete) ASSERT exists(x.nombre)
+CREATE CONSTRAINT ON (x:interprete) ASSERT exists(x.pais)
+
+
+
+//Nodos album
+CREATE(aaa:album{codigo:111,nombre:" Pablo Alborán"}),
+      (bbb:album{codigo:222,nombre:" Lo mejor que hay en mi vida"}),
+      (ccc:album{codigo:333,nombre:" Loco de amor"})
+
+//restricciones 
+CREATE CONSTRAINT ON (y:album) ASSERT y.codigo IS UNIQUE
+
+//campos obligatorios - ejecutar individualmente
+CREATE CONSTRAINT ON (y:album) ASSERT exists(y.codigo)
+CREATE CONSTRAINT ON (y:album) ASSERT exists(y.nombre)
+
+//Relaciones cancion->album
+MATCH (w:cancion) WHERE w.codigo = 1
+MATCH (y:album) WHERE y.codigo =222
+CREATE (w)-[:Pertenece]->(y)
+
+MATCH (w:cancion) WHERE w.codigo = 2
+MATCH (y:album) WHERE y.codigo =222
+CREATE (w)-[:Pertenece]->(y)
+
+MATCH (w:cancion) WHERE w.codigo = 3
+MATCH (y:album) WHERE y.codigo =222
+CREATE (w)-[:Pertenece]->(y)
+
+MATCH (w:cancion) WHERE w.codigo = 4
+MATCH (y:album) WHERE y.codigo =111
+CREATE (w)-[:Pertenece]->(y)
+
+MATCH (w:cancion) WHERE w.codigo = 6
+MATCH (y:album) WHERE y.codigo =333
+CREATE (w)-[:Pertenece]->(y)
+
+MATCH (w:cancion) WHERE w.codigo = 7
+MATCH (y:album) WHERE y.codigo =333
+CREATE (w)-[:Pertenece]->(y)
+
+//Relaciones interprete->cancion 
+
+MATCH (w:interprete) WHERE w.codigo = 11
+MATCH (y:cancion) WHERE y.codigo =1
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 11
+MATCH (y:cancion) WHERE y.codigo =2
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 11
+MATCH (y:cancion) WHERE y.codigo =3
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 33
+MATCH (y:cancion) WHERE y.codigo =4
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 33
+MATCH (y:cancion) WHERE y.codigo =5
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 22
+MATCH (y:cancion) WHERE y.codigo =6
+CREATE (w)-[:canta]->(y)
+
+MATCH (w:interprete) WHERE w.codigo = 22
+MATCH (y:cancion) WHERE y.codigo =7
+CREATE (w)-[:canta]->(y)
+
+
+MATCH (allNodes) RETURN allNodes
